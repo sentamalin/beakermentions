@@ -13,5 +13,139 @@
     <script type="module" src="index.js"></script>
   </head>
   <body>
+    <main>
+      <header id="file">
+        <div id="file-meta">
+          <img class="drive-thumb" src="thumb.svg" width="64" height="64" />
+          <a class="file-url"><h1>Sample File</h1></a>
+        </div>
+        <div id="file-actions">
+          <a id="file-upvote"><abbr title="Upvote">⬆️</abbr></a>
+          <span id="file-vote-total">0</span>
+          <a id="file-downvote"><abbr title="Downvote">⬇️</abbr></a>
+          <a id="app-settings"><abbr title="Settings">⚙️</abbr></a>
+        </div>
+      </header>
+      <section id="mentions">
+        <article class="mention">
+          <header>
+            <div class="mention-meta">
+              <img class="drive-thumb" src="thumb.svg" width="64" height="64" />
+              <a class="mention-url"><h1>Sample Author</h1></a>
+            </div>
+          </header>
+          <div class="mention-content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec est finibus, vulputate leo ac, posuere elit. Pellentesque non augue hendrerit, eleifend nulla vel, fringilla ante. Aliquam a luctus dolor. Mauris vel felis volutpat, ullamcorper sapien nec, tincidunt velit.</p>
+          </div>
+          <footer class="mention-actions">
+            <a class="mention-upvote"><abbr title="Upvote">⬆️</abbr></a>
+            <span class="mention-vote-total">0</span>
+            <a id="mention-downvote"><abbr title="Downvote">⬇️</abbr></a>
+            <a class="mention-reply"><abbr title="Reply">↩️</abbr></a>
+          </footer>
+          <section class="nested-mentions">
+            <article class="mention">
+              <header>
+                <div class="mention-meta">
+                  <img class="drive-thumb" src="thumb.svg" width="64" height="64" />
+                  <a class="mention-url"><h1>Sample Author</h1></a>
+                </div>
+              </header>
+              <div class="mention-content">
+                <p>Mauris vel felis volutpat, ullamcorper sapien nec, tincidunt velit.</p>
+              </div>
+              <footer class="mention-actions">
+                <a class="mention-upvote"><abbr title="Upvote">⬆️</abbr></a>
+                <span class="mention-vote-total">0</span>
+                <a id="mention-downvote"><abbr title="Downvote">⬇️</abbr></a>
+                <a class="mention-reply"><abbr title="Reply">↩️</abbr></a>
+              </footer>
+              <section class="nested-mentions">
+                <article class="mention">
+                  <header>
+                    <div class="mention-meta">
+                      <img class="drive-thumb" src="thumb.svg" width="64" height="64" />
+                      <a class="mention-url"><h1>Sample Author</h1></a>
+                    </div>
+                  </header>
+                  <div class="mention-content">
+                    <p>Mauris vel felis volutpat, ullamcorper sapien nec, tincidunt velit.</p>
+                  </div>
+                  <footer class="mention-actions">
+                    <a class="mention-upvote"><abbr title="Upvote">⬆️</abbr></a>
+                    <span class="mention-vote-total">0</span>
+                    <a id="mention-downvote"><abbr title="Downvote">⬇️</abbr></a>
+                    <a class="mention-reply"><abbr title="Reply">↩️</abbr></a>
+                  </footer>
+                  <section class="nested-mentions">
+                  </section>
+                </article>
+              </section>
+            </article>
+            <article class="mention">
+              <header>
+                <div class="mention-meta">
+                  <img class="drive-thumb" src="thumb.svg" width="64" height="64" />
+                  <a class="mention-url"><h1>Sample Author</h1></a>
+                </div>
+              </header>
+              <div class="mention-content">
+                <p>Pellentesque non augue hendrerit, eleifend nulla vel, fringilla ante. Aliquam a luctus dolor.</p>
+              </div>
+              <footer class="mention-actions">
+                <a class="mention-upvote"><abbr title="Upvote">⬆️</abbr></a>
+                <span class="mention-vote-total">0</span>
+                <a id="mention-downvote"><abbr title="Downvote">⬇️</abbr></a>
+                <a class="mention-reply"><abbr title="Reply">↩️</abbr></a>
+              </footer>
+              <section class="nested-mentions">
+              </section>
+            </article>
+          </section>
+        </article>
+        <article class="mention">
+          <header>
+            <div class="mention-meta">
+              <img class="drive-thumb" src="thumb.svg" width="64" height="64" />
+              <a class="mention-url"><h1>Sample Author</h1></a>
+            </div>
+          </header>
+          <div class="mention-content">
+            <p>Pellentesque non augue hendrerit, eleifend nulla vel, fringilla ante. Aliquam a luctus dolor.</p>
+          </div>
+          <footer class="mention-actions">
+            <a class="mention-upvote"><abbr title="Upvote">⬆️</abbr></a>
+            <span class="mention-vote-total">0</span>
+            <a id="mention-downvote"><abbr title="Downvote">⬇️</abbr></a>
+            <a class="mention-reply"><abbr title="Reply">↩️</abbr></a>
+          </footer>
+          <section class="nested-mentions">
+          </section>
+        </article>
+      </section>
+      <section id="mention-sender">
+        <label for="sender-text">Mention</label>
+        <input id="sender-text" type="text" placeholder="Join The Conversation!" />
+        <button id="sender-send" type="submit"><abbr title="Send">📡</abbr></button>
+      </section>
+    </main>
+    <template id="mention-template">
+      <article class="mention">
+        <header>
+          <div class="mention-meta">
+            <img class="drive-thumb" width="64" height="64" />
+            <a class="mention-url"><h1></h1></a>
+          </div>
+        </header>
+        <div class="mention-content"></div>
+        <footer class="mention-actions">
+          <a class="mention-upvote"><abbr title="Upvote">⬆️</abbr></a>
+          <span class="mention-vote-total">0</span>
+          <a id="mention-downvote"><abbr title="Downvote">⬇️</abbr></a>
+          <a class="mention-reply"><abbr title="Reply">↩️</abbr></a>
+        </footer>
+        <section class="nested-mentions"></section>
+      </article>
+    </template>
   </body>
 </html>

@@ -9,3 +9,225 @@
  *                                                                                        *
  * You should have received a copy of the CC0 Public Domain Dedication along              *
  * with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.   */
+
+ :root {
+   --text-color: #474747;
+   --border-color: #bbb;
+   --highlight-color: #4fb1ff;
+   --default-border: 1px solid var(--border-color);
+ }
+
+body * {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #eaeaf2;
+  color: var(--text-color);
+}
+
+main {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+abbr {
+  text-decoration: none;
+}
+
+#file, #mentions > .mention > header, #mention-sender {
+  background-color: #fafafa;
+}
+
+#file {
+  width: 100%;
+  padding: 0.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--default-border);
+}
+
+#file-meta {
+  display: flex;
+  align-items: center;
+}
+
+#file-meta * {
+  display: block;
+  margin-right: 0.5rem;
+}
+
+#file-meta img {
+  width: 1rem;
+  height: auto;
+}
+
+#file-meta h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+}
+
+#file-actions {
+  display: flex;
+  align-items: baseline;
+}
+
+#file-actions * {
+  display: block;
+  margin: 0 0.25rem;
+}
+
+#file-actions *:last-child {
+  margin-right: 0;
+}
+
+.mention {
+  background-color: #fff;
+}
+
+#mentions > .mention {
+  margin: 0.5rem 0.5rem 1rem 0.5rem;
+  border: var(--default-border);
+  border-radius: 5px;
+}
+
+#mentions > .mention > * {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.nested-mentions {
+  padding: 0 !important;
+}
+
+#mentions > .mention > *:first-child {
+  padding-top: 0.5rem;
+}
+
+#mentions > .mention > *:last-child {
+  padding-bottom: 0.5rem;
+}
+
+#mentions > .mention > header {
+  padding-bottom: 0.5rem;
+  border-bottom: var(--default-border);
+}
+
+#mentions > .mention > header > .mention-meta {
+  display: flex;
+  align-items: center;
+}
+
+#mentions > .mention > header > .mention-meta img {
+  width: 1rem;
+  height: auto;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+#mentions > .mention > header > .mention-meta h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+}
+
+#mentions > .mention > footer {
+  padding-bottom: 0.5rem;
+}
+
+.mention {
+  font-size: 0.75rem;
+}
+
+.mention > footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 0.5rem;
+}
+
+.mention > footer * {
+  display: block;
+  margin: 0 0.25rem;
+}
+
+.mention > footer *:last-child {
+  margin-right: 0;
+}
+
+.nested-mentions > .mention {
+  border-top: var(--default-border);
+}
+
+.nested-mentions > .mention > header > .mention-meta {
+  padding-top: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.nested-mentions > .mention > header > .mention-meta img {
+  width: 0.75rem;
+  height: auto;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.nested-mentions > .mention > header > .mention-meta h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 0.75rem;
+}
+
+.nested-mentions > .mention > * {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+#mention-sender {
+  width: 100%;
+  padding: 0.5rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  border-top: var(--default-border);
+  display: flex;
+  font-size: 1rem;
+}
+
+#mention-sender label {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+
+#mention-sender * {
+  padding: 0.5rem;
+}
+
+#mention-sender input {
+  width: 100%;
+  border-radius: 5px 0 0 5px;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px 0 1px 1px;
+}
+
+#mention-sender button {
+  border-radius: 0 5px 5px 0;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px 1px 1px 0;
+  font-weight: bold;
+  background-color: var(--highlight-color);
+  color: #fff;
+}
