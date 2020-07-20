@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="emoji" width="48.048" height="46.066" version="1.1" viewBox="0 0 48.048 46.066" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+    <cc:license>https://creativecommons.org/licenses/by-sa/4.0/#</cc:license>
+    <cc:attributionName>OpenMoji</cc:attributionName>
+    <cc:attributionURL>https://openmoji.org/</cc:attributionURL>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="line" transform="translate(-11.784 -14.933)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2">
+  <path d="m33.738 45.933c8.2843 0 15-6.7157 15-15 0-8.2842-6.7157-15-15-15z"/>
+  <path d="m52.642 27.962c1.6565 0.0351 2.9709 1.4064 2.9358 3.0629s-1.4064 2.9709-3.0629 2.9358"/>
+  <path d="m17.912 32.49h-4.3872s-0.7404 0.0215-0.7404-1.5303c0-1.5519 0.7404-1.5305 0.7404-1.5305h4.3872z"/>
+  <line x1="24.131" x2="33.738" y1="30.933" y2="30.933"/>
+  <line x1="22.121" x2="33.738" y1="27.649" y2="15.933"/>
+  <line x1="22.156" x2="33.738" y1="34.274" y2="45.933"/>
+  <line x1="40.238" x2="58.831" y1="59.999" y2="59.999"/>
+  <polyline points="48.8 59.999 51.704 38.197 54.953 38.197 52.049 59.999"/>
+ </g>
+</svg>

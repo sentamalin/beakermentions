@@ -1,0 +1,3 @@
+[submodule "modules/Validator"]
+	path = modules/Validator
+	url = https://github.com/sentamalin/beakermentions-validator.git
