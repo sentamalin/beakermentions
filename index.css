@@ -29,7 +29,7 @@ body {
 
 main {
   margin-top: 3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 abbr {
@@ -75,7 +75,7 @@ abbr {
 
 #file-actions {
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 
 #file-actions * {
@@ -210,24 +210,54 @@ abbr {
   position: absolute;
 }
 
-#mention-sender * {
+#sender-text, #sender-send {
   padding: 0.5rem;
 }
 
-#mention-sender input {
-  width: 100%;
-  border-radius: 5px 0 0 5px;
+#sender-text, #sender-attach {
   border-style: solid;
   border-color: var(--border-color);
-  border-width: 1px 0 1px 1px;
 }
 
-#mention-sender button {
+#sender-text {
+  width: 100%;
+  border-width: 1px 0;
+}
+
+#sender-send {
   border-radius: 0 5px 5px 0;
-  border-style: solid;
-  border-color: var(--border-color);
   border-width: 1px 1px 1px 0;
+  border-color: var(--highlight-color);
   font-weight: bold;
   background-color: var(--highlight-color);
   color: #fff;
+}
+
+#sender-attach {
+  border-radius: 5px 0 0 5px;
+  border-width: 1px 0 1px 1px;
+  font-weight: bold;
+  background-color: #fff;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+}
+
+div.visual-media {
+  padding: 0.5rem 0 0 0 !important;
+}
+
+#mentions > .mention > div.visual-media {
+  padding-top: 0 !important;
+}
+
+div.visual-media * {
+  width: 100%;
+  height: auto;
+}
+
+footer.visual-media {
+  padding-top: 0.5rem;
+}
+
+#mentions > .mention > footer.visual-media {
+  padding-top: 0.5rem;
 }
