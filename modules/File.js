@@ -39,6 +39,7 @@ export class File {
   get totalReposts() { return this.#totalReposts; }
   get totalReplies() { return this.#totalReplies; }
   get mentions() { return this.#mentions; }
+  get sendLink() { return `${this.#endpoint}?target=${this.#url}`; }
 
   /********** Constructor/Init **********/
 
@@ -204,7 +205,7 @@ export class File {
             }
             await this.#readyMentions();
           }
-        }
+        } else { throw "fetchResponseNotOk"; }
       } catch (error) {
         console.error("File.init:", error);
         console.debug("File.init: Failed to get the file; it may be offline.");
@@ -318,9 +319,9 @@ export class File {
 
     // Find what kind of mentions this may be in the HTML
     if (this.#isMentioning) {
-      allReplies = parsedContent.querySelectorAll(".u-in-reply-to");
-      allLikes = parsedContent.querySelectorAll(".u-like-of");
-      allReposts = parsedContent.querySelectorAll(".u-repost-of");
+      let allReplies = parsedContent.querySelectorAll(".u-in-reply-to");
+      let allLikes = parsedContent.querySelectorAll(".u-like-of");
+      let allReposts = parsedContent.querySelectorAll(".u-repost-of");
       for (let i = 0; i < allReplies.length; i++) {
         if (allReplies[i].getAttribute("href") === this.#isMentioning) { this.#isAReply = true; }
       }
