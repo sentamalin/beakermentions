@@ -227,7 +227,7 @@ export class File {
         mentionPath = mentionPath.replace("://", "/");
         mentionPath = `${this.#endpoint}${mentionPath}.json`;
         let mentionsFile = await beaker.hyperdrive.readFile(mentionPath, "utf8");
-        let mentions = JSON.Parse(mentionsFile);
+        let mentions = JSON.parse(mentionsFile);
         mentions.forEach(mention => {
           this.#mentions.push(new File({
             url: mention,
