@@ -64,17 +64,6 @@ export class File {
       try {
         let stat = await hyperdrive.stat(path);
 
-        // Check the metadata to determine what kind of mention this may be
-        if (stat.metadata.inReplyTo) {
-          if (stat.metadata.inReplyTo === this.#url) { this.#isAReply = true; }
-        }
-        if (stat.metadata.likeOf) {
-          if (stat.metadata.likeOf === this.#url) { this.#isALike = true; }
-        }
-        if (stat.metadata.repostOf) {
-          if (stat.metadata.repostOf === this.#url) { this.#isARepost = true; }
-        }
-
         // As a default, use the drive icon as the thumbnail
         this.#thumb = `${drive}thumb`;
 
@@ -104,12 +93,25 @@ export class File {
           } catch {}
         }
 
+        // Check the metadata to determine what kind of mention this may be
+        if (this.#isMentioning) {
+          if (stat.metadata.inReplyTo) {
+            if (stat.metadata.inReplyTo === this.#isMentioning) { this.#isAReply = true; }
+          }
+          if (stat.metadata.likeOf) {
+            if (stat.metadata.likeOf === this.#isMentioning) { this.#isALike = true; }
+          }
+          if (stat.metadata.repostOf) {
+            if (stat.metadata.repostOf === this.#isMentioning) { this.#isARepost = true; }
+          }
+        }
+
         if (stat.isFile()) {
           let htmlRegex = new RegExp(/\.html?$/i);
           // If the file is HTML
           if (htmlRegex.test(path)) {
             let file = await hyperdrive.readFile(path, "utf8");
-            this.#parseURL(file);
+            this.#parseHTML(file);
             await this.#readyMentions();
           }
 
@@ -320,22 +322,23 @@ export class File {
       allLikes = parsedContent.querySelectorAll(".u-like-of");
       allReposts = parsedContent.querySelectorAll(".u-repost-of");
       for (let i = 0; i < allReplies.length; i++) {
-        if (allReplies[i].getAttribute("href") === this.#url) { this.#isAReply = true; }
+        if (allReplies[i].getAttribute("href") === this.#isMentioning) { this.#isAReply = true; }
       }
       for (let i = 0; i < allLikes.length; i++) {
-        if (allLikes[i].getAttribute("href") === this.#url) { this.#isALike = true; }
+        if (allLikes[i].getAttribute("href") === this.#isMentioning) { this.#isALike = true; }
       }
       for (let i = 0; i < allReposts.length; i++) {
-        if (allReposts[i].getAttribute("href") === this.#url) { this.#isARepost = true; }
+        if (allReposts[i].getAttribute("href") === this.#isMentioning) { this.#isARepost = true; }
       }
     }
   }
 
   #getAbsoluteURL(baseURL, relURL) {
     let output;
+    let absoluteRegex = new RegExp(/:\/\//);
     let baseSplit = baseURL.split("/");
     if (relURL === "") { output = baseURL; }
-    else if (this.#absoluteRegex.test(relURL)) { output = relURL; }
+    else if (absoluteRegex.test(relURL)) { output = relURL; }
     else if (relURL.charAt(0) === "/") {
       output = `${baseSplit[0]}//${baseSplit[2]}${relURL}`;
     } else {

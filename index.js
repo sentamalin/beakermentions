@@ -16,6 +16,11 @@ class Beakermentions {
 }
 
 async function main() {
+  let testFile = new File({
+    "url" : "hyper://be127cc55e7e872f6be870ab0fa631be431f3917aa4dc7d5d23ea46287d986fc/testMentions/mainPost.md"
+  });
+  await testFile.init();
+  console.log("Test File -", testFile);
 }
 
 main();
