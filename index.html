@@ -29,7 +29,14 @@
           <a id="app-settings"><abbr title="Settings">⚙️</abbr></a>
         </div>
       </header>
-      <section id="mentions"></section>
+      <section id="blank">
+        <img src="thumb.svg" width="128" height="128" />
+      </section>
+      <section id="loading" class="hidden">
+        <p>Loading Mentions...</p>
+      </section>
+      <section id="mentions" class="hidden"></section>
+      <section id="config" class="hidden"></section>
       <section id="mention-sender">
         <button id="sender-attach" disabled="disabled"><abbr title="Attach File">📎</abbr></button>
         <label for="sender-text">Mention</label>

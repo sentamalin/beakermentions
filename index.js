@@ -19,10 +19,22 @@ async function main() {
     currentFile = new File({
       "url" : params.get("url")
     });
+    onLoadingMentions();
     await currentFile.init();
     getFileInformation(currentFile);
     getMentions(currentFile, document.querySelector("#mentions"), document.querySelector("#mention-template"));
+    mentionsLoaded();
   }
+}
+
+function onLoadingMentions() {
+  document.getElementById("blank").classList.add("hidden");
+  document.getElementById("loading").classList.remove("hidden");
+}
+
+function mentionsLoaded() {
+  document.getElementById("loading").classList.add("hidden");
+  document.getElementById("mentions").classList.remove("hidden");
 }
 
 function getFileInformation(file) {

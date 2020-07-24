@@ -24,9 +24,39 @@ body {
   color: var(--text-color);
 }
 
-main {
+.hidden {
+  visibility: hidden;
+}
+
+#mentions {
   margin-top: 3rem;
   margin-bottom: 4rem;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#blank {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#blank img {
+  opacity: 0.25;
 }
 
 abbr {
