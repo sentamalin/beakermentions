@@ -11,7 +11,10 @@
 // with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 import { File } from "./modules/File.js";
+import { WebmentionValidator } from "./modules/Validator/index.js";
+
 let currentFile;
+const validator = new WebmentionValidator();
 
 async function main() {
   let url = null;
@@ -30,7 +33,8 @@ function clearMentionContainer() {
 
 async function loadMentions(url) {
   currentFile = new File({
-    "url" : url
+    "url" : url,
+    "validator" : validator
   });
   onLoadingMentions();
   await currentFile.init();

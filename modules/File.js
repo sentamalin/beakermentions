@@ -26,6 +26,7 @@ export class File {
   #totalReposts = 0;
   #totalReplies = 0;
   #mentions = [];
+  #validator;
 
   get url() { return this.#url; }
   get endpoint() { return this.#endpoint; }
@@ -45,14 +46,14 @@ export class File {
 
   constructor(options) {
     this.#url = options.url;
-    if (options.isMentioning) {
-      this.#isMentioning = options.isMentioning;
-    } else { this.#isMentioning = null; }
+    if (options.isMentioning) { this.#isMentioning = options.isMentioning; }
+    else { this.#isMentioning = null; }
+    if (options.validator) { this.#validator = options.validator; }
+    else { this.#validator = new WebmentionValidator(); }
   }
 
   async init() {
-    let Validator = new WebmentionValidator();
-    this.#endpoint = await Validator.getTargetEndpoint(this.#url);
+    this.#endpoint = await this.#validator.getTargetEndpoint(this.#url);
     let urlSplit = this.#url.split("/");
     let drive = `${urlSplit[0]}//${urlSplit[2]}/`;
     for (let i = 0; i < 3; i++) { urlSplit.shift(); }
@@ -234,7 +235,8 @@ export class File {
         mentions.forEach(mention => {
           this.#mentions.push(new File({
             url: mention,
-            isMentioning: this.#url
+            isMentioning: this.#url,
+            validator: this.#validator
           }));
         });
         for (let i = 0; i < this.#mentions.length; i++) {
@@ -248,8 +250,7 @@ export class File {
   }
 
   #parseHTML(file) {
-    let parser = new DOMParser();
-    let parsedContent = parser.parseFromString(file, "text/html");
+    let parsedContent = this.#validator.domParser.parseFromString(file, "text/html");
 
     // Get the thumbnail from a @rel="icon", if available
     let thumb = parsedContent.querySelector("*[rel*='icon']");
