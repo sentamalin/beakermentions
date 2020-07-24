@@ -53,6 +53,14 @@ body {
   padding: 0;
 }
 
+#config {
+  z-index: 2;
+}
+
+#loading, #blank, #no-endpoint, #no-replies {
+  z-index: 1;
+}
+
 abbr {
   text-decoration: none;
 }
@@ -68,6 +76,7 @@ abbr {
   top: 0;
   left: 0;
   display: flex;
+  z-index: 3;
   justify-content: space-between;
   align-items: center;
   border-bottom: var(--default-border);
@@ -86,7 +95,6 @@ abbr {
 #file-meta img {
   width: 1rem;
   height: auto;
-  border-radius: 50%;
 }
 
 #file-meta h1 {
@@ -216,6 +224,7 @@ abbr {
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: 3;
   border-top: var(--default-border);
   display: flex;
   font-size: 1rem;

@@ -14,23 +14,39 @@ import { File } from "./modules/File.js";
 let currentFile;
 
 async function main() {
-  let params = new URLSearchParams(document.location.search.substring(1));
-  if (params.get("url")) {
-    currentFile = new File({
-      "url" : params.get("url")
-    });
-    onLoadingMentions();
-    await currentFile.init();
-    getFileInformation(currentFile);
-    if (!currentFile.endpoint) { onNoEndpoint(); }
-    else if (!currentFile.mentions.length) { onNoReplies(); }
-    else { onMentionsLoaded(); }
-  }
+  let url = null;
+  beaker.panes.setAttachable();
+  let pane = await beaker.panes.attachToLastActivePane();
+  if (pane) { url = pane.url; }
+  beaker.panes.addEventListener("pane-navigated", e => {
+    loadMentions(e.detail.url);
+  });
+  if (url) { loadMentions(url); }
+}
+
+function clearMentionContainer() {
+  document.getElementById("mentions").textContent = "";
+}
+
+async function loadMentions(url) {
+  currentFile = new File({
+    "url" : url
+  });
+  onLoadingMentions();
+  await currentFile.init();
+  getFileInformation(currentFile);
+  if (!currentFile.endpoint) { onNoEndpoint(); }
+  else if (!currentFile.mentions.length) { onNoReplies(); }
+  else { onMentionsLoaded(); }
 }
 
 function onLoadingMentions() {
+  document.getElementById("mentions").classList.add("hidden");
   document.getElementById("blank").classList.add("hidden");
+  document.getElementById("no-endpoint").classList.add("hidden");
+  document.getElementById("no-replies").classList.add("hidden");
   document.getElementById("loading").classList.remove("hidden");
+  clearMentionContainer();
 }
 
 function onMentionsLoaded() {
@@ -50,9 +66,6 @@ function onNoReplies() {
 }
 
 function getFileInformation(file) {
-  document.querySelector("#file-meta > .file-url > h1").textContent = file.author;
-  document.querySelector("#file-meta > .file-url").setAttribute("href", file.url);
-  document.querySelector("#file-meta > .drive-thumb").setAttribute("src", file.thumb);
   document.getElementById("file-like-total").textContent = file.totalLikes;
   document.getElementById("file-repost-total").textContent = file.totalReposts;
 }
