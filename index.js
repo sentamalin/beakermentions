@@ -22,7 +22,7 @@ async function main() {
     onLoadingMentions();
     await currentFile.init();
     getFileInformation(currentFile);
-    if (currentFile.endpoint) { onNoEndpoint(); }
+    if (!currentFile.endpoint) { onNoEndpoint(); }
     else if (!currentFile.mentions.length) { onNoReplies(); }
     else { onMentionsLoaded(); }
   }
