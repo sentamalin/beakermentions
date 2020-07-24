@@ -10,12 +10,9 @@
  * You should have received a copy of the CC0 Public Domain Dedication along              *
  * with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.   */
 
- :root {
-   --text-color: #474747;
-   --border-color: #bbb;
-   --highlight-color: #4fb1ff;
+:root {
    --default-border: 1px solid var(--border-color);
- }
+}
 
 body * {
   box-sizing: border-box;
@@ -23,7 +20,7 @@ body * {
 
 body {
   font-family: sans-serif;
-  background-color: #eaeaf2;
+  background-color: var(--app-background-color);
   color: var(--text-color);
 }
 
@@ -37,7 +34,7 @@ abbr {
 }
 
 #file, #mentions > .mention > header, #mention-sender {
-  background-color: #fafafa;
+  background-color: var(--header-background-color);
 }
 
 #file {
@@ -89,7 +86,7 @@ abbr {
 }
 
 .mention {
-  background-color: #fff;
+  background-color: var(--miniwindow-background-color);
 }
 
 #mentions > .mention {
@@ -215,30 +212,36 @@ abbr {
   padding: 0.5rem;
 }
 
-#sender-text, #sender-attach {
+#sender-text, #sender-attach, #sender-send {
   border-style: solid;
+}
+
+#sender-text, #sender-attach {
   border-color: var(--border-color);
 }
 
 #sender-text {
   width: 100%;
   border-width: 1px 0;
+  background-color: var(--input-background-color);
+  color: var(--text-color);
 }
 
 #sender-send {
   border-radius: 0 5px 5px 0;
   border-width: 1px 1px 1px 0;
-  border-color: var(--highlight-color);
+  border-color: var(--send-button-border-color);
   font-weight: bold;
   background-color: var(--highlight-color);
-  color: #fff;
+  color: var(--send-button-text-color);
 }
 
 #sender-attach {
   border-radius: 5px 0 0 5px;
   border-width: 1px 0 1px 1px;
   font-weight: bold;
-  background-color: #fff;
+  background-color: var(--input-background-color);
+  color: var(--text-color);
   padding: 0.5rem 0 0.5rem 0.5rem;
 }
 

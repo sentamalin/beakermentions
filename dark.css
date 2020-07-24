@@ -1,0 +1,23 @@
+/* Beakermentions (dark.css) - Read and send responses on what you're currently viewing   *
+ * on Beaker Browser.                                                                     *
+ *                                                                                        *
+ * Written in 2020 by Don Geronimo <email@sentamal.in>                                    *
+ *                                                                                        *
+ * To the extent possible under law, the author(s) have dedicated all copyright           *
+ * and related and neighboring rights to this software to the public domain               *
+ * worldwide. This software is distributed without any warranty.                          *
+ *                                                                                        *
+ * You should have received a copy of the CC0 Public Domain Dedication along              *
+ * with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.   */
+
+:root {
+  --text-color: #bbc;
+  --border-color: #669;
+  --highlight-color: #335;
+  --app-background-color: #223;
+  --header-background-color: #334;
+  --miniwindow-background-color: var(--app-background-color);
+  --input-background-color: var(--app-background-color);
+  --send-button-text-color: #d2d8fd;
+  --send-button-border-color: var(--border-color);
+}
