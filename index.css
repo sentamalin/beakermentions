@@ -65,6 +65,7 @@ abbr {
 #file-meta img {
   width: 1rem;
   height: auto;
+  border-radius: 50%;
 }
 
 #file-meta h1 {
@@ -260,4 +261,9 @@ footer.visual-media {
 
 #mentions > .mention > footer.visual-media {
   padding-top: 0.5rem;
+}
+
+.file-url, .mention-url {
+  text-decoration: none;
+  color: var(--text-color);
 }
