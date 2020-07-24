@@ -22,8 +22,9 @@ async function main() {
     onLoadingMentions();
     await currentFile.init();
     getFileInformation(currentFile);
-    getMentions(currentFile, document.querySelector("#mentions"), document.querySelector("#mention-template"));
-    mentionsLoaded();
+    if (currentFile.endpoint) { onNoEndpoint(); }
+    else if (!currentFile.mentions.length) { onNoReplies(); }
+    else { onMentionsLoaded(); }
   }
 }
 
@@ -32,9 +33,20 @@ function onLoadingMentions() {
   document.getElementById("loading").classList.remove("hidden");
 }
 
-function mentionsLoaded() {
+function onMentionsLoaded() {
+  appendMentions(currentFile, document.querySelector("#mentions"), document.querySelector("#mention-template"))
   document.getElementById("loading").classList.add("hidden");
   document.getElementById("mentions").classList.remove("hidden");
+}
+
+function onNoEndpoint() {
+  document.getElementById("loading").classList.add("hidden");
+  document.getElementById("no-endpoint").classList.remove("hidden");
+}
+
+function onNoReplies() {
+  document.getElementById("loading").classList.add("hidden");
+  document.getElementById("no-replies").classList.remove("hidden");
 }
 
 function getFileInformation(file) {
@@ -45,7 +57,7 @@ function getFileInformation(file) {
   document.getElementById("file-repost-total").textContent = file.totalReposts;
 }
 
-function getMentions(file, container, template) {
+function appendMentions(file, container, template) {
   for(let i = 0; i < file.mentions.length; i++) {
     if (file.mentions[i].isAReply) {
       let clone = template.content.cloneNode(true);
@@ -55,6 +67,7 @@ function getMentions(file, container, template) {
       clone.querySelector(".mention-like-total").textContent = file.mentions[i].totalLikes;
       clone.querySelector(".mention-repost-total").textContent = file.mentions[i].totalReposts;
       clone.querySelector(".mention-url").setAttribute("href", file.mentions[i].url);
+
       switch (file.mentions[i].content.type) {
         case "text":
           clone.querySelector(".mention-content").innerHTML = `<p>${file.mentions[i].content.content}</p>`;
@@ -72,7 +85,7 @@ function getMentions(file, container, template) {
           break;
       }
 
-      getMentions(file.mentions[i], clone.querySelector(".nested-mentions"), template);
+      appendMentions(file.mentions[i], clone.querySelector(".nested-mentions"), template);
       container.appendChild(clone);
     }
   }
