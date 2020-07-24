@@ -254,7 +254,8 @@ export class File {
     // Get the thumbnail from a @rel="icon", if available
     let thumb = parsedContent.querySelector("*[rel*='icon']");
     if (thumb) {
-      this.#thumb = this.#getAbsoluteURL(this.#url, thumb.getAttribute("href"));
+      url = new URL(thumb.getAttribute("href"), this.#url);
+      this.#thumb = url.toString();
     }
 
     // Get the author from the HTML, if available
@@ -332,26 +333,5 @@ export class File {
         if (allReposts[i].getAttribute("href") === this.#isMentioning) { this.#isARepost = true; }
       }
     }
-  }
-
-  #getAbsoluteURL(baseURL, relURL) {
-    let output;
-    let absoluteRegex = new RegExp(/:\/\//);
-    let baseSplit = baseURL.split("/");
-    if (relURL === "") { output = baseURL; }
-    else if (absoluteRegex.test(relURL)) { output = relURL; }
-    else if (relURL.charAt(0) === "/") {
-      output = `${baseSplit[0]}//${baseSplit[2]}${relURL}`;
-    } else {
-      let array = relURL.split("/");
-      baseSplit.pop();
-      for (let i = 0; i < array.length; i++) {
-        if (array[i] === ".") continue;
-        if (array[i] === "..") baseSplit.pop();
-        else baseSplit.push(array[i]);
-      }
-      output = baseSplit.join("/");
-    }
-    return output;
   }
 }
