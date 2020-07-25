@@ -27,6 +27,7 @@ export class File {
   #totalReplies = 0;
   #mentions = [];
   #validator;
+  #domParser;
 
   get url() { return this.#url; }
   get endpoint() { return this.#endpoint; }
@@ -48,8 +49,10 @@ export class File {
     this.#url = options.url;
     if (options.isMentioning) { this.#isMentioning = options.isMentioning; }
     else { this.#isMentioning = null; }
+    if (options.domParser) { this.#domParser = options.domParser; }
+    else { this.#domParser = new DOMParser(); }
     if (options.validator) { this.#validator = options.validator; }
-    else { this.#validator = new WebmentionValidator(); }
+    else { this.#validator = new WebmentionValidator({ domParser: this.#domParser }); }
   }
 
   async init() {
@@ -236,7 +239,8 @@ export class File {
           this.#mentions.push(new File({
             url: mention,
             isMentioning: this.#url,
-            validator: this.#validator
+            validator: this.#validator,
+            domParser: this.#domParser
           }));
         });
         for (let i = 0; i < this.#mentions.length; i++) {
@@ -250,7 +254,7 @@ export class File {
   }
 
   #parseHTML(file) {
-    let parsedContent = this.#validator.domParser.parseFromString(file, "text/html");
+    let parsedContent = this.#domParser.parseFromString(file, "text/html");
 
     // Get the thumbnail from a @rel="icon", if available
     let thumb = parsedContent.querySelector("*[rel*='icon']");

@@ -14,7 +14,8 @@ import { File } from "./modules/File.js";
 import { WebmentionValidator } from "./modules/Validator/index.js";
 
 let currentFile;
-const validator = new WebmentionValidator();
+const domParser = new DOMParser();
+const validator = new WebmentionValidator({ domParser: domParser });
 
 async function main() {
   let url = null;
@@ -34,7 +35,8 @@ function clearMentionContainer() {
 async function loadMentions(url) {
   currentFile = new File({
     "url" : url,
-    "validator" : validator
+    "validator" : validator,
+    "domParser" : domParser
   });
   onLoadingMentions();
   await currentFile.init();
