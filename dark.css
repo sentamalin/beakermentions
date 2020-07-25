@@ -13,11 +13,18 @@
 :root {
   --text-color: #bbc;
   --border-color: #669;
-  --highlight-color: #335;
+  --highlight-color: #2864dc;
   --app-background-color: #223;
   --header-background-color: #334;
   --miniwindow-background-color: var(--app-background-color);
   --input-background-color: var(--app-background-color);
   --send-button-text-color: #d2d8fd;
-  --send-button-border-color: var(--border-color);
+}
+
+#file-meta img {
+  filter: invert(1);
+}
+
+#blank img {
+  filter: none;
 }

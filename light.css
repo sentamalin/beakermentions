@@ -13,11 +13,10 @@
 :root {
   --text-color: #474747;
   --border-color: #bbb;
-  --highlight-color: #5289f7;
+  --highlight-color: #2864dc;
   --app-background-color: #eaeaf2;
   --header-background-color: #fafafa;
   --miniwindow-background-color: #fff;
   --input-background-color: #fff;
   --send-button-text-color: #fff;
-  --send-button-border-color: var(--highlight-color);
 }

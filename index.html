@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" title="light" href="light.css" />
     <link rel="alternate stylesheet" title="dark" href="dark.css" />
-    <script type="module" src="index.js"></script>
+    <!-- <script type="module" src="index.js"></script> -->
   </head>
   <body>
     <main>
@@ -42,7 +42,25 @@
       <section id="no-replies" class="hidden">
         <p>No mentions yet; be the first!</p>
       </section>
-      <section id="config" class="hidden"></section>
+      <section id="config">
+        <ul>
+          <li class="config-dark-mode">
+            <label for="config-dark-mode">Dark Mode</label>
+            <input id="config-dark-mode" type="checkbox" />
+          </li>
+          <li class="config-endpoint">
+            <label for="config-endpoint">Your Endpoint</label>
+            <input id="config-endpoint" type="url" />
+          </li>
+          <li class="config-drive">
+            <span>Save Mentions To</span>
+            <div>
+              <button id="config-drive-profile">Profile</button>
+              <button id="config-drive-drive">Other Drive</button>
+            </div>
+          </li>
+        </ul>
+      </section>
       <section id="mention-sender">
         <button id="sender-attach" disabled="disabled"><abbr title="Attach File">📎</abbr></button>
         <label for="sender-text">Mention</label>

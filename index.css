@@ -53,10 +53,6 @@ body {
   padding: 0;
 }
 
-#config {
-  z-index: 2;
-}
-
 #loading, #blank, #no-endpoint, #no-replies {
   z-index: 1;
 }
@@ -241,29 +237,32 @@ abbr {
   position: absolute;
 }
 
-#sender-text, #sender-send {
+#sender-text, #sender-send, #config-endpoint {
   padding: 0.5rem;
 }
 
-#sender-text, #sender-attach, #sender-send {
+#sender-text, #sender-attach, #sender-send, #config-endpoint {
   border-style: solid;
 }
 
-#sender-text, #sender-attach {
+#sender-text, #sender-attach, #config-endpoint {
   border-color: var(--border-color);
 }
 
-#sender-text {
+#sender-text, #config-endpoint {
   width: 100%;
-  border-width: 1px 0;
   background-color: var(--input-background-color);
   color: var(--text-color);
+}
+
+#sender-text {
+  border-width: 1px 0;
 }
 
 #sender-send {
   border-radius: 0 5px 5px 0;
   border-width: 1px 1px 1px 0;
-  border-color: var(--send-button-border-color);
+  border-color: var(--highlight-color);
   font-weight: bold;
   background-color: var(--highlight-color);
   color: var(--send-button-text-color);
@@ -302,4 +301,81 @@ footer.visual-media {
 .file-url, .mention-url {
   text-decoration: none;
   color: var(--text-color);
+}
+
+#config {
+  z-index: 2;
+  background-color: var(--app-background-color);
+  font-size: smaller;
+  font-weight: bold;
+}
+
+#config ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  list-style-type: none;
+}
+
+#config li {
+  margin: 0 0 1rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#config .config-dark-mode {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#config li:last-child {
+  margin: 0;
+}
+
+#config-endpoint {
+  border-radius: 5px;
+  border-width: 1px;
+}
+
+.config-endpoint > *, .config-drive > * {
+  margin: 0.25rem 0 0 0;
+}
+
+.config-endpoint > *:first-child, .config-drive > *:first-child {
+  margin: 0;
+}
+
+.config-drive div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.config-drive button {
+  display: block;
+  width: 50%;
+  padding: 0.5rem;
+  margin: 0;
+  border-style: solid;
+  border-color: var(--border-color);
+  background-color: var(--input-background-color);
+  color: var(--text-color);
+}
+
+#config-drive-profile {
+  border-width: 1px;
+  border-radius: 5px 0 0 5px;
+}
+
+#config-drive-drive {
+  border-width: 1px 1px 1px 0px;
+  border-radius: 0 5px 5px 0;
+}
+
+#config-drive-profile.current-drive, #config-drive-drive.current-drive {
+  background-color: var(--highlight-color);
+  border-color: var(--highlight-color);
+  color: var(--send-button-text-color);
 }
