@@ -175,8 +175,8 @@ async function loadMentions(url) {
   });
   onLoadingMentions();
   await currentFile.init();
-  document.getElementById("file-like-total").textContent = file.totalLikes;
-  document.getElementById("file-repost-total").textContent = file.totalReposts;
+  document.getElementById("file-like-total").textContent = currentFile.totalLikes;
+  document.getElementById("file-repost-total").textContent = currentFile.totalReposts;
   if (!currentFile.endpoint) { onNoEndpoint(); }
   else if (!currentFile.mentions.length) { onNoReplies(); }
   else { onMentionsLoaded(); }
