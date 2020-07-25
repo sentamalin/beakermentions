@@ -27,7 +27,7 @@ async function main() {
     isProfile: window.localStorage.getItem("isProfile"),
     driveURL: window.localStorage.getItem("driveURL")
   });
-  await updateAllConfigurationViews();
+  updateAllConfigurationViews();
 
   // Set event handlers for configuration changes
   configuration.onDarkModeSet(response => { updateDarkModeView(response); });
@@ -56,7 +56,7 @@ async function main() {
 
 /********** Updating Configuration Views **********/
 
-async function updateAllConfigurationViews() {
+function updateAllConfigurationViews() {
   updateDarkModeView(configuration.darkMode);
   updateEndpointView(configuration.endpoint);
   updateDriveButtonView(configuration.isProfile);
