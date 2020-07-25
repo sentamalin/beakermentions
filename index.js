@@ -12,12 +12,32 @@
 
 import { File } from "./modules/File.js";
 import { WebmentionValidator } from "./modules/Validator/index.js";
+import { Configuration } from "./modules/Configuration.js";
 
 let currentFile;
+let configuration;
 const domParser = new DOMParser();
 const validator = new WebmentionValidator({ domParser: domParser });
 
 async function main() {
+  // Load configuration from local storage and update configuration views
+  configuration = new Configuration(window.localStorage, {
+    darkMode: window.localStorage.getItem("darkMode"),
+    endpoint: window.localStorage.getItem("endpoint"),
+    isProfile: window.localStorage.getItem("isProfile"),
+    driveURL: window.localStorage.getItem("driveURL")
+  });
+  await updateAllConfigurationViews();
+
+  // Set event handlers for configuration interactions
+  document.getElementById("config-endpoint").addEventListener("keyup", onEndpointChange);
+  document.getElementById("config-drive-profile").addEventListener("click", onProfileButtonClick);
+  document.getElementById("config-drive-drive").addEventListener("click", onDriveButtonClick);
+  document.getElementById("app-settings").addEventListener("click", onConfigurationAnchorClick);
+  document.getElementById("config-theme-light").addEventListener("click", onLightModeClick);
+  document.getElementById("config-theme-dark").addEventListener("click", onDarkModeClick);
+
+  // Set up loading the current page from the last attached pane
   let url = null;
   beaker.panes.setAttachable();
   let pane = await beaker.panes.attachToLastActivePane();
@@ -28,8 +48,86 @@ async function main() {
   if (url) { loadMentions(url); }
 }
 
+async function updateAllConfigurationViews() {
+  updateDarkModeView();
+  updateEndpointView();
+  await updateDriveView();
+}
+
+function onConfigurationAnchorClick() {
+  const configPage = document.getElementById("config");
+  if (configPage.classList.contains("hidden")) { configPage.classList.remove("hidden"); }
+  else { configPage.classList.add("hidden"); }
+}
+
+function onLightModeClick() {
+  configuration.darkMode = "false";
+  updateDarkModeView();
+}
+
+function onDarkModeClick() {
+  configuration.darkMode = "true";
+  updateDarkModeView();
+}
+
+function updateDarkModeView() {
+  if (configuration.darkMode === "true") {
+    document.getElementById("config-theme-light").classList.remove("current");
+    document.getElementById("config-theme-dark").classList.add("current");
+  } else if (configuration.darkMode === "false") {
+    document.getElementById("config-theme-light").classList.add("current");
+    document.getElementById("config-theme-dark").classList.remove("current");
+  }
+}
+
+async function onProfileButtonClick() {
+  try {
+    let profile = await beaker.contacts.requestProfile();
+    configuration.isProfile = "true";
+    configuration.driveURL = profile.url;
+    await updateDriveView();
+  } catch {}
+}
+
+async function onDriveButtonClick() {
+  try {
+    let drive = await beaker.shell.selectDriveDialog({
+      writable: true
+    });
+    configuration.isProfile = "false";
+    configuration.driveURL = drive;
+    await updateDriveView();
+  } catch {}
+}
+
+async function updateDriveView() {
+  try {
+    if (configuration.driveURL) {
+      const driveInfo = await beaker.hyperdrive.getInfo(configuration.driveURL);
+      document.getElementById("config-drive-info").textContent = driveInfo.title;
+    }
+    if (configuration.isProfile === "true") { 
+      document.getElementById("config-drive-profile").classList.add("current");
+      document.getElementById("config-drive-drive").classList.remove("current");
+    } else if (configuration.isProfile === "false") {
+      document.getElementById("config-drive-profile").classList.remove("current");
+      document.getElementById("config-drive-drive").classList.add("current");
+    }
+  } catch {}
+}
+
+function onEndpointChange() {
+  configuration.endpoint = document.getElementById("config-endpoint").value;
+}
+
+function updateEndpointView() {
+  if (configuration.endpoint) { document.getElementById("config-endpoint").value = configuration.endpoint; }
+}
+
 function clearMentionContainer() {
   document.getElementById("mentions").textContent = "";
+  document.getElementById("file-like-total").textContent = "0";
+  document.getElementById("file-repost-total").textContent = "0";
 }
 
 async function loadMentions(url) {
