@@ -29,7 +29,13 @@ async function main() {
   });
   await updateAllConfigurationViews();
 
-  // Set event handlers for configuration interactions
+  // Set event handlers for configuration changes
+  configuration.onDarkModeSet(response => { updateDarkModeView(response); });
+  configuration.onEndpointSet(response => { updateEndpointView(response); });
+  configuration.onIsProfileSet(response => { updateDriveButtonView(response); });
+  configuration.onDriveURLSet(response => { updateDriveInfoView(response); });
+
+  // Set event handlers for configuration view interactions
   document.getElementById("config-endpoint").addEventListener("keyup", onEndpointChange);
   document.getElementById("config-drive-profile").addEventListener("click", onProfileButtonClick);
   document.getElementById("config-drive-drive").addEventListener("click", onDriveButtonClick);
@@ -48,11 +54,51 @@ async function main() {
   if (url) { loadMentions(url); }
 }
 
+/********** Updating Configuration Views **********/
+
 async function updateAllConfigurationViews() {
-  updateDarkModeView();
-  updateEndpointView();
-  await updateDriveView();
+  updateDarkModeView(configuration.darkMode);
+  updateEndpointView(configuration.endpoint);
+  updateDriveButtonView(configuration.isProfile);
+  updateDriveInfoView(configuration.driveURL);
 }
+
+function updateDarkModeView(response) {
+  if (response) {
+    document.getElementById("config-theme-light").classList.remove("current");
+    document.getElementById("config-theme-dark").classList.add("current");
+  } else {
+    document.getElementById("config-theme-light").classList.add("current");
+    document.getElementById("config-theme-dark").classList.remove("current");
+  }
+}
+
+function updateEndpointView(response) {
+  if (response) { document.getElementById("config-endpoint").value = response; }
+}
+
+function updateDriveButtonView(response) {
+  if (response) { 
+    document.getElementById("config-drive-profile").classList.add("current");
+    document.getElementById("config-drive-drive").classList.remove("current");
+  } else {
+    document.getElementById("config-drive-profile").classList.remove("current");
+    document.getElementById("config-drive-drive").classList.add("current");
+  }
+}
+
+async function updateDriveInfoView(response) {
+  if (response) {
+    try {
+      const driveInfo = await beaker.hyperdrive.getInfo(response);
+      document.getElementById("config-drive-info").textContent = driveInfo.title;
+    } catch {}
+  }
+}
+
+/********** Browser Events **********/
+
+// Configuration Events
 
 function onConfigurationAnchorClick() {
   const configPage = document.getElementById("config");
@@ -61,31 +107,18 @@ function onConfigurationAnchorClick() {
 }
 
 function onLightModeClick() {
-  configuration.darkMode = "false";
-  updateDarkModeView();
+  configuration.darkMode = false;
 }
 
 function onDarkModeClick() {
-  configuration.darkMode = "true";
-  updateDarkModeView();
-}
-
-function updateDarkModeView() {
-  if (configuration.darkMode === "true") {
-    document.getElementById("config-theme-light").classList.remove("current");
-    document.getElementById("config-theme-dark").classList.add("current");
-  } else if (configuration.darkMode === "false") {
-    document.getElementById("config-theme-light").classList.add("current");
-    document.getElementById("config-theme-dark").classList.remove("current");
-  }
+  configuration.darkMode = true;
 }
 
 async function onProfileButtonClick() {
   try {
     let profile = await beaker.contacts.requestProfile();
-    configuration.isProfile = "true";
+    configuration.isProfile = true;
     configuration.driveURL = profile.url;
-    await updateDriveView();
   } catch {}
 }
 
@@ -94,25 +127,8 @@ async function onDriveButtonClick() {
     let drive = await beaker.shell.selectDriveDialog({
       writable: true
     });
-    configuration.isProfile = "false";
+    configuration.isProfile = false;
     configuration.driveURL = drive;
-    await updateDriveView();
-  } catch {}
-}
-
-async function updateDriveView() {
-  try {
-    if (configuration.driveURL) {
-      const driveInfo = await beaker.hyperdrive.getInfo(configuration.driveURL);
-      document.getElementById("config-drive-info").textContent = driveInfo.title;
-    }
-    if (configuration.isProfile === "true") { 
-      document.getElementById("config-drive-profile").classList.add("current");
-      document.getElementById("config-drive-drive").classList.remove("current");
-    } else if (configuration.isProfile === "false") {
-      document.getElementById("config-drive-profile").classList.remove("current");
-      document.getElementById("config-drive-drive").classList.add("current");
-    }
   } catch {}
 }
 
@@ -120,29 +136,7 @@ function onEndpointChange() {
   configuration.endpoint = document.getElementById("config-endpoint").value;
 }
 
-function updateEndpointView() {
-  if (configuration.endpoint) { document.getElementById("config-endpoint").value = configuration.endpoint; }
-}
-
-function clearMentionContainer() {
-  document.getElementById("mentions").textContent = "";
-  document.getElementById("file-like-total").textContent = "0";
-  document.getElementById("file-repost-total").textContent = "0";
-}
-
-async function loadMentions(url) {
-  currentFile = new File({
-    "url" : url,
-    "validator" : validator,
-    "domParser" : domParser
-  });
-  onLoadingMentions();
-  await currentFile.init();
-  getFileInformation(currentFile);
-  if (!currentFile.endpoint) { onNoEndpoint(); }
-  else if (!currentFile.mentions.length) { onNoReplies(); }
-  else { onMentionsLoaded(); }
-}
+// Mention Loading Events
 
 function onLoadingMentions() {
   document.getElementById("mentions").classList.add("hidden");
@@ -150,7 +144,9 @@ function onLoadingMentions() {
   document.getElementById("no-endpoint").classList.add("hidden");
   document.getElementById("no-replies").classList.add("hidden");
   document.getElementById("loading").classList.remove("hidden");
-  clearMentionContainer();
+  document.getElementById("mentions").textContent = "";
+  document.getElementById("file-like-total").textContent = 0;
+  document.getElementById("file-repost-total").textContent = 0;
 }
 
 function onMentionsLoaded() {
@@ -169,9 +165,21 @@ function onNoReplies() {
   document.getElementById("no-replies").classList.remove("hidden");
 }
 
-function getFileInformation(file) {
+/********** Load and append mentions **********/
+
+async function loadMentions(url) {
+  currentFile = new File({
+    "url" : url,
+    "validator" : validator,
+    "domParser" : domParser
+  });
+  onLoadingMentions();
+  await currentFile.init();
   document.getElementById("file-like-total").textContent = file.totalLikes;
   document.getElementById("file-repost-total").textContent = file.totalReposts;
+  if (!currentFile.endpoint) { onNoEndpoint(); }
+  else if (!currentFile.mentions.length) { onNoReplies(); }
+  else { onMentionsLoaded(); }
 }
 
 function appendMentions(file, container, template) {
