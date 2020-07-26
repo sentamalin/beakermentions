@@ -21,6 +21,10 @@
   --send-button-text-color: #d2d8fd;
 }
 
+a {
+  color: #8686ca;
+}
+
 #file-meta img {
   filter: invert(1);
 }
