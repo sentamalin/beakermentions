@@ -64,6 +64,7 @@ function updateAllConfigurationViews() {
 }
 
 function updateDarkModeView(response) {
+  // Change the highlighted style button
   if (response) {
     document.getElementById("config-theme-light").classList.remove("current");
     document.getElementById("config-theme-dark").classList.add("current");
@@ -71,6 +72,10 @@ function updateDarkModeView(response) {
     document.getElementById("config-theme-light").classList.add("current");
     document.getElementById("config-theme-dark").classList.remove("current");
   }
+
+  // Change the stylesheet
+  if (response) { document.querySelector("link[title='page']").setAttribute("href", "dark.css"); }
+  else { document.querySelector("link[title='page']").setAttribute("href", "light.css"); }
 }
 
 function updateEndpointView(response) {
