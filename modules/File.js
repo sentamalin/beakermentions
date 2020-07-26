@@ -230,9 +230,10 @@ export class File {
   async #readyMentions() {
     if (this.#endpoint) {
       try {
-        let mentionPath = `mentions/${this.#url}`;
+        let mentionPath = `./mentions/${this.#url}`;
         mentionPath = mentionPath.replace("://", "/");
-        mentionPath = `${this.#endpoint}${mentionPath}.json`;
+        const url = new URL(mentionPath, this.#endpoint);
+        mentionPath = `${url.toString()}.json`;
         let mentionsFile = await beaker.hyperdrive.readFile(mentionPath, "utf8");
         let mentions = JSON.parse(mentionsFile);
         mentions.forEach(mention => {
