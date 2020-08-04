@@ -13,6 +13,7 @@
 import { File } from "./modules/File.js";
 import { WebmentionValidator } from "./modules/Validator/index.js";
 import { Configuration } from "./modules/Configuration.js";
+import * as WindowMessages from "./modules/WindowMessages.js";
 
 let currentFile;
 let configuration;
