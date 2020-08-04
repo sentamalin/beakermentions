@@ -11,25 +11,22 @@
 // with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 export function sendOrigin() {
-  const output = {
+  return {
     type: "origin"
   };
-  return JSON.stringify(output);
 }
 
 export function sendWebmention(source, target) {
-  const output = {
+  return {
     type: "send",
     source: source,
     target: target
   };
-  return JSON.stringify(output);
 }
 
 export function getWebmentions(target) {
-  const output = {
+  return {
     type: "get",
     target: target
   };
-  return JSON.stringify(output);
 }
