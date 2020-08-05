@@ -18,7 +18,7 @@ import * as WindowMessages from "./modules/WindowMessages.js";
 let currentFile;
 let configuration;
 const endpointIframe = document.getElementById("endpoint-iframe").contentWindow;
-let endpointOrigin;
+let endpointURL;
 let endpointReady;
 const domParser = new DOMParser();
 const validator = new WebmentionValidator({ domParser: domParser });
@@ -52,25 +52,34 @@ async function main() {
     const message = JSON.parse(event.data);
 
     // Verify that the event's origin is the endpoint that you expect before doing anything
-    if (event.origin === endpointOrigin) {
+    if (event.origin === endpointURL.origin) {
       switch (message.type) {
         case "handshake":
-          endpointIframe.postMessage(JSON.stringify(WindowMessages.sendOrigin()), endpointOrigin);
+          endpointIframe.postMessage(JSON.stringify(WindowMessages.sendOrigin()), endpointURL.origin);
+          console.debug("Handshake Received:", message);
           break;
         case "ready":
           if (message.origin === location.origin) {
             isEndpointReady(true);
+            console.debug("Ready Received:", message);
+            console.debug("Endpoint Ready is:", endpointReady);
           }
+          break;
         case "webmentions":
+          console.debug("Webmentions Received:", message);
           break;
         case "success":
+          console.debug("Success Received:", message);
+          break;
         case "failure":
+          console.debug("Failure Received:", message);
           break;
       }
     }
 
     // If it's not, show an error of some sort
     else {
+      console.error("Message received from <iframe>, but was not from the expected origin.");
     }
   }, false);
 
@@ -255,10 +264,9 @@ function appendMentions(file, container, template) {
 /********** <iframe>-setup functions **********/
 
 function setEndpoint(endpoint) {
-  const url = new URL(endpoint);
-  if (endpoint !== endpointIframe.location.href) {
-    endpointIframe.location.href = endpoint;
-    endpointOrigin = url.origin;
+  if ((!endpointURL) || (endpointURL.href !== endpointIframe.location.href)) {
+    endpointURL = new URL(endpoint);
+    endpointIframe.location.href = endpointURL.href;
     isEndpointReady(false);
   }
 }
