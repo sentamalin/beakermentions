@@ -17,6 +17,9 @@ import * as WindowMessages from "./modules/WindowMessages.js";
 
 let currentFile;
 let configuration;
+const endpointIframe = document.getElementById("endpoint-iframe").contentWindow;
+let endpointOrigin;
+let endpointReady;
 const domParser = new DOMParser();
 const validator = new WebmentionValidator({ domParser: domParser });
 
@@ -43,6 +46,33 @@ async function main() {
   document.getElementById("app-settings").addEventListener("click", onConfigurationAnchorClick);
   document.getElementById("config-theme-light").addEventListener("click", onLightModeClick);
   document.getElementById("config-theme-dark").addEventListener("click", onDarkModeClick);
+
+  // Set event handlers for <iframe> messages
+  window.addEventListener("message", event => {
+    const message = JSON.parse(event.data);
+
+    // Verify that the event's origin is the endpoint that you expect before doing anything
+    if (event.origin === endpointOrigin) {
+      switch (message.type) {
+        case "handshake":
+          endpointIframe.postMessage(JSON.stringify(WindowMessages.sendOrigin()), endpointOrigin);
+          break;
+        case "ready":
+          if (message.origin === location.origin) {
+            isEndpointReady(true);
+          }
+        case "webmentions":
+          break;
+        case "success":
+        case "failure":
+          break;
+      }
+    }
+
+    // If it's not, show an error of some sort
+    else {
+    }
+  }, false);
 
   // Set up loading the current page from the last attached pane
   let url = null;
@@ -219,6 +249,25 @@ function appendMentions(file, container, template) {
       appendMentions(file.mentions[i], clone.querySelector(".nested-mentions"), template);
       container.appendChild(clone);
     }
+  }
+}
+
+/********** <iframe>-setup functions **********/
+
+function setEndpoint(endpoint) {
+  const url = new URL(endpoint);
+  if (endpoint !== endpointIframe.location.href) {
+    endpointIframe.location.href = endpoint;
+    endpointOrigin = url.origin;
+    isEndpointReady(false);
+  }
+}
+
+function isEndpointReady(ready) {
+  if (ready) {
+    endpointReady = true;
+  } else {
+    endpointReady = false;
   }
 }
 

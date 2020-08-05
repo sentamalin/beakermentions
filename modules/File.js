@@ -41,7 +41,6 @@ export class File {
   get totalReposts() { return this.#totalReposts; }
   get totalReplies() { return this.#totalReplies; }
   get mentions() { return this.#mentions; }
-  get sendLink() { return `${this.#endpoint}?target=${this.#url}`; }
 
   /********** Constructor/Init **********/
 
