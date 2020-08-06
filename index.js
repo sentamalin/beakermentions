@@ -278,9 +278,9 @@ function appendMentions(file, container, template) {
 /********** <iframe>-setup functions **********/
 
 function setEndpoint(endpoint) {
-  if ((!endpointURL) || (endpointURL.href !== endpointIframe.location.href)) {
+  if ((!endpointURL) || (endpoint !== endpointURL.href)) {
     endpointURL = new URL(endpoint);
-    endpointIframe.location.href = endpointURL.href;
+    endpointIframe.location.href = endpointURL;
     isEndpointReady(false);
   }
 }
