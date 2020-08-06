@@ -255,7 +255,7 @@ export class File {
     // Get the thumbnail from a @rel="icon", if available
     let thumb = parsedContent.querySelector("*[rel*='icon']");
     if (thumb) {
-      url = new URL(thumb.getAttribute("href"), this.#url);
+      const url = new URL(thumb.getAttribute("href"), this.#url);
       this.#thumb = url.toString();
     }
 

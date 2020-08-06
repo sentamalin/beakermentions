@@ -237,7 +237,7 @@ abbr {
   font-size: 1rem;
 }
 
-#mention-sender label {
+#mention-sender label, .config-iframe {
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(50%);
   height: 1px;

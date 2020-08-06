@@ -20,6 +20,9 @@ let configuration;
 const endpointIframe = document.getElementById("endpoint-iframe").contentWindow;
 let endpointURL;
 let endpointReady;
+let targetURL;
+let paneURL = null;
+let pendingURL = null;
 const domParser = new DOMParser();
 const validator = new WebmentionValidator({ domParser: domParser });
 
@@ -48,7 +51,7 @@ async function main() {
   document.getElementById("config-theme-dark").addEventListener("click", onDarkModeClick);
 
   // Set event handlers for <iframe> messages
-  window.addEventListener("message", event => {
+  window.addEventListener("message", async event => {
     const message = JSON.parse(event.data);
 
     // Verify that the event's origin is the endpoint that you expect before doing anything
@@ -69,9 +72,15 @@ async function main() {
           console.debug("Webmentions Received:", message);
           break;
         case "success":
+          pendingURL = null;
+          loadMentions(paneURL);
           console.debug("Success Received:", message);
           break;
         case "failure":
+          if (pendingURL) {
+            await beaker.hyperdrive.unlink(pendingURL);
+            pendingURL = null;
+          }
           console.debug("Failure Received:", message);
           break;
       }
@@ -84,14 +93,18 @@ async function main() {
   }, false);
 
   // Set up loading the current page from the last attached pane
-  let url = null;
   beaker.panes.setAttachable();
   let pane = await beaker.panes.attachToLastActivePane();
-  if (pane) { url = pane.url; }
+  if (pane) {
+    paneURL = pane.url;
+    targetURL = paneURL;
+  }
   beaker.panes.addEventListener("pane-navigated", e => {
+    paneURL = e.detail.url;
+    targetURL = paneURL;
     loadMentions(e.detail.url);
   });
-  if (url) { loadMentions(url); }
+  if (paneURL) { loadMentions(paneURL); }
 }
 
 /********** Updating Configuration Views **********/
@@ -222,6 +235,7 @@ async function loadMentions(url) {
   await currentFile.init();
   document.getElementById("file-like-total").textContent = currentFile.totalLikes;
   document.getElementById("file-repost-total").textContent = currentFile.totalReposts;
+  if (currentFile.endpoint) { setEndpoint(currentFile.endpoint); }
   if (!currentFile.endpoint) { onNoEndpoint(); }
   else if (!currentFile.mentions.length) { onNoReplies(); }
   else { onMentionsLoaded(); }
@@ -274,9 +288,64 @@ function setEndpoint(endpoint) {
 function isEndpointReady(ready) {
   if (ready) {
     endpointReady = true;
+    if (configuration.driveURL) {
+      document.getElementById("sender-text").removeAttribute("disabled");
+      document.getElementById("sender-send").removeAttribute("disabled");
+      document.getElementById("sender-send").addEventListener("click", sendMarkdownMention);
+    }
   } else {
     endpointReady = false;
+    document.getElementById("sender-text").setAttribute("disabled", "disabled");
+    document.getElementById("sender-send").setAttribute("disabled", "disabled");
+    document.getElementById("sender-send").removeEventListener("click", sendMarkdownMention);
   }
+}
+
+/********** Mention-sending functions **********/
+
+async function sendMarkdownMention() {
+  const markdown = document.getElementById("sender-text").value;
+  const now = new Date();
+  const path = `/beaker/beakermentions/${now.getTime()}.md`;
+  if (endpointReady && configuration.driveURL) {
+    const drive = beaker.hyperdrive.drive(configuration.driveURL);
+    await drive.writeFile(path, markdown, "utf8");
+    let metadata = {
+      "inReplyTo" : targetURL
+    }
+    if (configuration.endpoint) { metadata.webmention = configuration.endpoint; }
+    await drive.updateMetadata(path, metadata);
+    const source = new URL(path, configuration.driveURL);
+    pendingURL = source.href;
+    sendSendMessage(source.href, targetURL);
+  }
+}
+
+async function sendFileMention() {
+  // STUB: Need to use File API to get uploaded files from user
+  const upload = "Sample Uploaded File";
+  const now = new Date();
+  const path = `/beaker/beakermentions/samplepath.thing`;
+  if (endpointReady && configuration.driveURL) {
+    const drive = beaker.hyperdrive.drive(configuration.driveURL);
+    await drive.writeFile(path, upload, "binary");
+    let metadata = {
+      "inReplyTo" : targetURL
+    }
+    if (configuration.endpoint) { metadata.webmention = configuration.endpoint; }
+    await drive.updateMetadata(path, metadata);
+    const source = new URL(path, configuration.driveURL);
+    pendingURL = source.href;
+    sendSendMessage(source.href, targetURL);
+  }
+}
+
+function sendSendMessage(source, target) {
+  endpointIframe.postMessage(JSON.stringify(WindowMessages.sendWebmention(source, target)), endpointURL.origin);
+}
+
+function sendGetMessage(target) {
+  endpointIframe.postMessage(JSON.stringify(WindowMessages.sendWebmention(source, target)), endpointURL.origin);
 }
 
 main();
