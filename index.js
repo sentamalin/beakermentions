@@ -345,7 +345,7 @@ function sendSendMessage(source, target) {
 }
 
 function sendGetMessage(target) {
-  endpointIframe.postMessage(JSON.stringify(WindowMessages.sendWebmention(source, target)), endpointURL.origin);
+  endpointIframe.postMessage(JSON.stringify(WindowMessages.getWebmentions(target)), endpointURL.origin);
 }
 
 main();
