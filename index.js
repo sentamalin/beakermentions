@@ -318,7 +318,7 @@ async function sendMarkdownMention() {
     await drive.updateMetadata(path, metadata);
     const source = new URL(path, configuration.driveURL);
     pendingURL = source.href;
-    sendSendMessage(source.href, targetURL);
+    await sendSendMessage(source.href, targetURL);
   }
 }
 
@@ -337,20 +337,22 @@ async function sendFileMention() {
     await drive.updateMetadata(path, metadata);
     const source = new URL(path, configuration.driveURL);
     pendingURL = source.href;
-    sendSendMessage(source.href, targetURL);
+    await sendSendMessage(source.href, targetURL);
   }
 }
 
-function sendSendMessage(source, target) {
+async function sendSendMessage(source, target) {
   if (configuration.useWindowMessage) {
     endpointIframe.postMessage(JSON.stringify(WindowMessages.sendWebmention(source, target)), endpointURL.origin);
-  } else {}
+  } else {
+    let targetEndpoint = await validator.getTargetEndpoint(target);
+    let request = new URL(targetEndpoint);
+    request.search = `?source=${source}&target=${target}&done=${location.hostname}`;
+  }
 }
 
 function sendGetMessage(target) {
-  if (configuration.useWindowMessage) {
-    endpointIframe.postMessage(JSON.stringify(WindowMessages.getWebmentions(target)), endpointURL.origin);
-  } else {}
+  endpointIframe.postMessage(JSON.stringify(WindowMessages.getWebmentions(target)), endpointURL.origin);
 }
 
 main();
