@@ -15,6 +15,7 @@ export class Configuration {
   #endpoint = null;
   #isProfile = null;
   #driveURL = null;
+  #useWindowMessage = false;
   #endpointTimeout = null;
   #storage = null;
 
@@ -28,6 +29,10 @@ export class Configuration {
       if (options.isProfile === "true") { this.#isProfile = true; }
       else { this.#isProfile = false; }
     }
+    if (options.useWindowMessage) {
+      if (options.useWindowMessage === "true") { this.#useWindowMessage = true; }
+      else { this.#useWindowMessage = false; }
+    }
     if (options.endpoint) { this.#endpoint = options.endpoint; }
     if (options.driveURL) { this.#driveURL = options.driveURL; }
   }
@@ -36,6 +41,7 @@ export class Configuration {
   get endpoint() { return this.#endpoint; }
   get isProfile() { return this.#isProfile; }
   get driveURL() { return this.#driveURL; }
+  get useWindowMessage() { return this.#useWindowMessage; }
 
   set darkMode(darkMode) {
     this.#darkMode = darkMode;
@@ -44,6 +50,14 @@ export class Configuration {
   }
   darkModeSet(darkMode) {}
   onDarkModeSet(eventHandler) { this.darkModeSet = eventHandler; }
+
+  set useWindowMessage(useWindowMessage) {
+    this.#useWindowMessage = useWindowMessage;
+    this.#storage.setItem("useWindowMessage", this.#useWindowMessage);
+    this.useWindowMessageSet(useWindowMessage);
+  }
+  useWindowMessageSet(useWindowMessage) {}
+  onUseWindowMessageSet(eventHandler) { this.useWindowMessageSet = eventHandler; }
 
   set endpoint(endpoint) {
     clearTimeout(this.#endpointTimeout);

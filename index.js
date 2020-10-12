@@ -32,7 +32,8 @@ async function main() {
     darkMode: window.localStorage.getItem("darkMode"),
     endpoint: window.localStorage.getItem("endpoint"),
     isProfile: window.localStorage.getItem("isProfile"),
-    driveURL: window.localStorage.getItem("driveURL")
+    driveURL: window.localStorage.getItem("driveURL"),
+    useWindowMessage: window.localStorage.getItem("useWindowMessage")
   });
   updateAllConfigurationViews();
 
@@ -341,11 +342,15 @@ async function sendFileMention() {
 }
 
 function sendSendMessage(source, target) {
-  endpointIframe.postMessage(JSON.stringify(WindowMessages.sendWebmention(source, target)), endpointURL.origin);
+  if (configuration.useWindowMessage) {
+    endpointIframe.postMessage(JSON.stringify(WindowMessages.sendWebmention(source, target)), endpointURL.origin);
+  } else {}
 }
 
 function sendGetMessage(target) {
-  endpointIframe.postMessage(JSON.stringify(WindowMessages.getWebmentions(target)), endpointURL.origin);
+  if (configuration.useWindowMessage) {
+    endpointIframe.postMessage(JSON.stringify(WindowMessages.getWebmentions(target)), endpointURL.origin);
+  } else {}
 }
 
 main();
