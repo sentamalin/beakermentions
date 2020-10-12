@@ -17,7 +17,8 @@ import * as WindowMessages from "./modules/WindowMessages.js";
 
 let currentFile;
 let configuration;
-const endpointIframe = document.getElementById("endpoint-iframe").contentWindow;
+// Disabled as Iframe window messaging is currently not working
+// const endpointIframe = document.getElementById("endpoint-iframe").contentWindow;
 let endpointURL;
 let endpointReady;
 let targetURL;
@@ -279,11 +280,11 @@ function appendMentions(file, container, template) {
 /********** <iframe>-setup functions **********/
 
 function setEndpoint(endpoint) {
-  if ((!endpointURL) || (endpoint !== endpointURL.href)) {
+  if (((!endpointURL) || (endpoint !== endpointURL.href)) && configuration.useWindowMessage) {
     endpointURL = new URL(endpoint);
     endpointIframe.location.href = endpointURL;
     isEndpointReady(false);
-  }
+  } else { isEndpointReady(true); }
 }
 
 function isEndpointReady(ready) {
@@ -347,7 +348,8 @@ async function sendSendMessage(source, target) {
   } else {
     let targetEndpoint = await validator.getTargetEndpoint(target);
     let request = new URL(targetEndpoint);
-    request.search = `?source=${source}&target=${target}&done=${location.hostname}`;
+    request.search = `?source=${source}&target=${target}&done=${location.origin}`;
+    location.href = request;
   }
 }
 
