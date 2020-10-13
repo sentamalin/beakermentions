@@ -293,13 +293,17 @@ function isEndpointReady(ready) {
     if (configuration.driveURL) {
       document.getElementById("sender-text").removeAttribute("disabled");
       document.getElementById("sender-send").removeAttribute("disabled");
+      document.getElementById("sender-attach").removeAttribute("disabled");
       document.getElementById("sender-send").addEventListener("click", sendMarkdownMention);
+      document.getElementById("sender-attach").addEventListener("click", sendFileMention);
     }
   } else {
     endpointReady = false;
     document.getElementById("sender-text").setAttribute("disabled", "disabled");
     document.getElementById("sender-send").setAttribute("disabled", "disabled");
+    document.getElementById("sender-attach").setAttribute("disabled", "disabled");
     document.getElementById("sender-send").removeEventListener("click", sendMarkdownMention);
+    document.getElementById("sender-attach").removeEventListener("click", sendFileMention);
   }
 }
 
@@ -324,7 +328,7 @@ async function sendMarkdownMention() {
 }
 
 async function sendFileMention() {
-  // STUB: Need to use File API to get uploaded files from user
+  /* STUB: Need to use File API to get uploaded files from user
   const upload = "Sample Uploaded File";
   const now = new Date();
   const path = `/beaker/beakermentions/samplepath.thing`;
@@ -339,7 +343,31 @@ async function sendFileMention() {
     const source = new URL(path, configuration.driveURL);
     pendingURL = source.href;
     await sendSendMessage(source.href, targetURL);
+  } */
+
+  let selectedFile = await beaker.shell.selectFileDialog({
+    title: "Select a file to add to your response",
+    buttonLabel: "Select File",
+    select: ["file"],
+    allowMultiple: false,
+    disallowCreate: false
+  });
+  const fileExtension = selectedFile[0].path.split(".").pop();
+  let markdown;
+  switch (fileExtension) {
+    case "png":
+    case "jpg":
+    case "jpeg":
+    case "gif":
+    case "svg":
+      markdown = `![Image's alternative text](${selectedFile[0].url})`;
+      break;
+    default:
+      const selectedFilename = selectedFile[0].path.split("/").pop();
+      markdown = `[${selectedFilename}](${selectedFile[0].url})`;
+      break;
   }
+  document.getElementById("sender-text").value += markdown;
 }
 
 async function sendSendMessage(source, target) {
