@@ -4,6 +4,10 @@
 
 For more information on Beakermentions, visit [Beakermentions: Webmentions for Beaker Browser][7]
 
+## This Project Is Archived
+
+It was cool at the time to be able to essentially send and receive webmentions, but as I've started working more and more at my primary job post-pandemic, I've been coding less and less on this. As Beaker Browser is archived as of 27 December 2022, consequently I'm archiving Beakermentions, Beakermentions Endpoint, and Beakermentions Validator.
+
 ## License
 
 Written in 2020 by [Don Geronimo][2]. To the extent possible under law, Don Geronimo has waived all copyright and related or neighboring rights to Beakermentions by publishing it under the [CC0 1.0 Universal Public Domain Dedication][3]. This work is published from the United States.
